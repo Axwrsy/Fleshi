@@ -3,7 +3,7 @@ from flask import Flask, url_for, redirect, render_template, request
 app = Flask(__name__)
 
 @app.route('/')
-def index():
+def homepage():
     return render_template('homepage.html')
 
 #rota dinamica nome da var
