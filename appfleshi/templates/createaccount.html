@@ -6,7 +6,7 @@
 
 
 {% block form %}
-    <form>
+    <form method="post">
         {{ form.csrf_token }}
         {{ form.email.label() }}
         {{ form.email() }}
