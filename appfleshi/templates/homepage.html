@@ -16,7 +16,10 @@
  <h1>Fléshi- Página Inicial</h1>
 
         <h1>Fléshi</h1>
-        <form method="POST">
+
+
+        {% block form %}
+            <form method="POST">
             {{ form.csrf_token }}
                 {{ form.email.label() }}
                 {{ form.email() }}
@@ -25,16 +28,12 @@
                  {{ form.password() }}
 
                  {{ form.submit() }}
-
-
-
-        </form>
-
-
-
-
+            </form>
+        {% endblock %}
 
 </body>
 {%endblock %}
 
 </html>
+
+
