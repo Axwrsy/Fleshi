@@ -17,7 +17,7 @@ app.config['SECRET_KEY'] = 'secret'
 
 database = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
-login_manager = LoginManager()
+login_manager = LoginManager(app)
 
 #direciona p onde está a tela de login (homepage no caso)
 login_manager.login_view = 'homepage'

@@ -6,9 +6,14 @@ from appfleshi.forms import LoginForm, RegisterForm
 from appfleshi.models import User, Photo
 
 #redireciona p login
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def homepage():
     login_form = LoginForm()
+    if login_form.validate_on_submit():
+        user = User.query.filter_by(email=login_form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, login_form.password.data):
+            login_user(user)
+            return redirect(url_for('profile', username=user.username))
     return render_template('homepage.html', form=login_form)
 
 #nova rota p cadastro
@@ -34,3 +39,8 @@ def profile(username):
 
 
 
+@app.route("logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('homepage'))
