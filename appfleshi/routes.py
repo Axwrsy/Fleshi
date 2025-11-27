@@ -40,12 +40,6 @@ def profile(user_id):
        user = User.query.get(int(user_id))
        return render_template('profile.html', user=user)
 
-
-
-
-
-
-
 @app.route("/logout")
 @login_required
 def logout():
