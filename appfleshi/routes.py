@@ -31,7 +31,7 @@ def createaccount():
 
 
 #rota dinamica nome da var aq eh o perfil
-@app.route('/profile/<username>')
+@app.route('/profile/<user_id>')
 @login_required
 def profile(username):
     return render_template('profile.html', username=username)
