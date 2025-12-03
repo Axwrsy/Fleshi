@@ -1,0 +1,18 @@
+{% extends "homepage.html" %}
+
+
+{% block title %}
+    fléshi - feed
+
+{% endblock %}
+
+{% block body %}
+    {% include "navbar.html" %}
+    <h1>Feed principal</h1>
+
+    {% for photo in photos %}
+       <a href="{{ url_for('profile', user_id=photo.user_id) }}">
+           <img src="{{ url_for('static', filename='posts_photos/'~ photo.file_name) }}" alt="~ photo.file_name" >
+       </a>
+    {% endfor %}
+{% endblock %}
