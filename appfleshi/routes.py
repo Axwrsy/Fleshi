@@ -15,7 +15,7 @@ def homepage():
         user = User.query.filter_by(email=login_form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, login_form.password.data):
             login_user(user)
-            return redirect(url_for('profile', user_id=user.id))
+            return redirect(url_for('feed'))
     return render_template('homepage.html', form=login_form)
 
 #nova rota p cadastro

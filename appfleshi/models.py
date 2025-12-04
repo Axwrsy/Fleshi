@@ -6,6 +6,7 @@ from appfleshi import database, login_manager
 from flask_login import UserMixin
 
 #add o userMixin para saber q eh daq q vem os logins
+#unique p definir q o user é unico
 class User(database.Model, UserMixin):
   id = database.Column(database.Integer, primary_key=True)
   username = database.Column(database.String(20), unique=True, nullable=False)
