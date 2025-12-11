@@ -1,44 +1,76 @@
 {% extends "homepage.html" %}
 
 {% block title %}
-    Perfil - {{ username }}
-
+    Perfil - {{ user.username }}
 {% endblock %}
 
-
 {% block body %}
-    <body>
-        <h1>Perfil do usuário: {{ user.username }}</h1>
 
+<div class="container mt-4">
 
-        {% if user.bio %}
-            <p class="bio">{{ user.bio }}</p>
-        {% else %}
-            <p class="bio" style="color:gray;">Nenhuma biografia adicionada.</p>
-        {% endif %}
+    <!-- Título -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold">Perfil: {{ user.username }}</h1>
 
         {% if current_user.id == user.id %}
-            <a href="{{ url_for('editar_perfil') }}">Editar biografia</a>
+            <a class="btn btn-outline-primary btn-sm" href="{{ url_for('editar_perfil') }}">
+               Editar biografia
+            </a>
         {% endif %}
+    </div>
 
-        {% if form %}
+    <!-- Biografia -->
+    <div class="card shadow-sm mb-4" style="max-width: 600px;">
+        <div class="card-body">
+            <h5 class="card-title">Biografia</h5>
+
+            {% if user.bio %}
+                <p class="card-text">{{ user.bio }}</p>
+            {% else %}
+                <p class="text-muted">Nenhuma biografia adicionada.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Formulário de Upload -->
+    {% if form %}
+    <div class="card shadow-sm mb-4" style="max-width: 600px;">
+        <div class="card-body">
+            <h5 class="card-title">Adicionar foto</h5>
             <form method="post" enctype="multipart/form-data">
                 {{ form.csrf_token }}
-
-                {{form.photo() }}
-                {{ form.submit() }}
+                <div class="mb-3">
+                    {{ form.photo(class="form-control") }}
+                </div>
+                <button class="btn btn-success" type="submit">
+                     Postar
+                </button>
             </form>
+        </div>
+    </div>
+    {% endif %}
 
+    <!-- Fotos do usuário -->
+    <h3 class="mt-4 mb-3">Fotos publicadas</h3>
 
-        {% endif %}
-
-
-
-
+    <div class="row">
         {% for photo in user.photos %}
-            <img src="{{ url_for('static', filename='posts_photos/'~ photo.file_name) }}" alt="~ photo.file_name" >
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm">
+                    <img src="{{ url_for('static', filename='posts_photos/' ~ photo.file_name) }}"
+                         class="card-img-top"
+                         style="height: 200px; object-fit: cover;"
+                         alt="{{ photo.file_name }}">
+                </div>
+            </div>
         {% endfor %}
+    </div>
 
-        <a href="{{ url_for('logout') }}">sair</a>
-    </body>
+    <!-- Logout -->
+    <div class="mt-4">
+        <a class="btn btn-danger" href="{{ url_for('logout') }}">Sair</a>
+    </div>
+
+</div>
+
 {% endblock %}

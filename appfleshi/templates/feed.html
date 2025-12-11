@@ -10,9 +10,15 @@
     {% include "navbar.html" %}
     <h1>Feed principal</h1>
 
+<div class="container text-center">
+  <div class="row">
+      <div class="col">
     {% for photo in photos %}
        <a href="{{ url_for('profile', user_id=photo.user_id) }}">
            <img src="{{ url_for('static', filename='posts_photos/'~ photo.file_name) }}" alt="~ photo.file_name" >
        </a>
+      </div>
+  </div>
+</div>
     {% endfor %}
 {% endblock %}
