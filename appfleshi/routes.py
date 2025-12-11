@@ -71,8 +71,7 @@ def feed():
     return render_template("feed.html", photos=photos)
 
 
-# adcionar biografiaa
-@app.route("/edit-profile", methods=["GET", "POST"])
+@app.route("/editar_perfil", methods=["GET", "POST"])
 @login_required
 def editar_perfil():
     if request.method == "POST":
