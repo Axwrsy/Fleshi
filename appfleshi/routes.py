@@ -1,4 +1,4 @@
-from flask import  render_template, url_for, redirect
+from flask import render_template, url_for, redirect, request
 from flask_login import login_required, login_user, logout_user, current_user
 
 from appfleshi import app, database, bcrypt
@@ -7,7 +7,8 @@ from appfleshi.models import User, Photo
 import os
 from werkzeug.utils import secure_filename
 
-#redireciona p login
+
+# redireciona p login
 @app.route('/', methods=['GET', 'POST'])
 def homepage():
     login_form = LoginForm()
@@ -15,43 +16,46 @@ def homepage():
         user = User.query.filter_by(email=login_form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, login_form.password.data):
             login_user(user)
-            return redirect(url_for('feed'))
+            return redirect(url_for('profile', user_id=user.id))
     return render_template('homepage.html', form=login_form)
 
-#nova rota p cadastro
+
+# nova rota p cadastro
 @app.route('/createaccount', methods=['GET', 'POST'])
 def createaccount():
     register_form = RegisterForm()
     if register_form.validate_on_submit():
-        password = bcrypt.generate_password_hash(register_form.password.data) #criptografa a senha
-        user = User(username=register_form.username.data, email=register_form.email.data, password=password)#p nao armazenaar a senha pura
+        password = bcrypt.generate_password_hash(register_form.password.data)  # criptografa a senha
+        user = User(username=register_form.username.data, email=register_form.email.data,
+                    password=password)  # p nao armazenaar a senha pura
         database.session.add(user)
         database.session.commit()
-        login_user(user, remember=True) #faz o login do user
-        return redirect(url_for('profile', user_id=user.id)) #retorna pra função
+        login_user(user, remember=True)  # faz o login do user
+        return redirect(url_for('profile', user_id=user.id))  # retorna pra função
     return render_template('createaccount.html', form=register_form)
 
 
-#rota dinamica nome da var aq eh o perfil
+# rota dinamica nome da var aq eh o perfil
 @app.route('/profile/<user_id>', methods=['GET', 'POST'])
 @login_required
 def profile(user_id):
-   if int(user_id) == int(current_user.id):
-       photo_form = PhotoForm()
-       if photo_form.validate_on_submit():
-           file = photo_form.photo.data
-           secure_name = secure_filename(file.filename)
-           #responsaveis por salvar a img dentro da pasta
-           path = os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config["UPLOAD_FOLDER"], secure_name)
-           file.save(path)
-           photo = Photo(file_name=secure_name, user_id=current_user.id)
-           database.session.add(photo)
-           database.session.commit()
+    if int(user_id) == int(current_user.id):
+        photo_form = PhotoForm()
+        if photo_form.validate_on_submit():
+            file = photo_form.photo.data
+            secure_name = secure_filename(file.filename)
+            # responsaveis por salvar a img dentro da pasta
+            path = os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config["UPLOAD_FOLDER"], secure_name)
+            file.save(path)
+            photo = Photo(file_name=secure_name, user_id=current_user.id)
+            database.session.add(photo)
+            database.session.commit()
 
-       return render_template('profile.html', user=current_user, form=photo_form)
-   else:
-       user = User.query.get(int(user_id))
-       return render_template('profile.html', user=user, form=None)
+        return render_template('profile.html', user=current_user, form=photo_form)
+    else:
+        user = User.query.get(int(user_id))
+        return render_template('profile.html', user=user, form=None)
+
 
 @app.route("/logout")
 @login_required
@@ -59,8 +63,21 @@ def logout():
     logout_user()
     return redirect(url_for('homepage'))
 
+
 @app.route("/feed")
 @login_required
 def feed():
     photos = Photo.query.order_by(Photo.upload_date.desc()).all()
     return render_template("feed.html", photos=photos)
+
+
+# adcionar biografiaa
+@app.route("/edit-profile", methods=["GET", "POST"])
+@login_required
+def editar_perfil():
+    if request.method == "POST":
+        current_user.bio = request.form["bio"]
+        database.session.commit()
+        return redirect(url_for("profile", user_id=current_user.id))
+
+    return render_template("editprofile.html")

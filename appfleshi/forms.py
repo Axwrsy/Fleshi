@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField, FileField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length #importa todas partes do forms
 from appfleshi.models import User #importa a tabela p conseguir ver os users
 
+
 #em caso de legenda mexer aqq
 class PhotoForm(FlaskForm):
     photo = FileField('Foto', validators=[DataRequired()])

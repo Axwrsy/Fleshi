@@ -1,54 +1,65 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-     <!--meio q transforma em componente ai da p chamar o bloco -->
-    <title>
-        {% block title %}
-        Fléshi - Página Inicial
-        {% endblock %}
-    </title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+   <meta charset="UTF-8">
+   <title>
+       {% block title %}
+       Fléshi - Página Inicial
+       {% endblock %}
+   </title>
+
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-{% block body%}
 
+{% block body %}
 
-<body>
- <h1>Fléshi- Página Inicial</h1>
+<body class="bg-light">
 
-        <h1>Fléshi</h1>
+    <div class="container min-vh-100 d-flex flex-column justify-content-center align-items-center">
 
+        <div class="text-center mb-4">
+            <h1 class="fw-bold text-primary">Fléshi</h1>
+        </div>
 
-        {% block form %}
+        <div class="card shadow-lg p-4" style="max-width: 450px; width: 100%; border-radius: 15px;">
+            {% block form %}
             <form method="POST">
-            {{ form.csrf_token }}
-                <div class="p-5">
-                    {{ form.email.label(class="form-label") }}
+                {{ form.csrf_token }}
+
+                <div class="mb-3">
+                    {{ form.email.label(class="form-label fw-semibold") }}
                     {{ form.email(class="form-control") }}
-
                 </div>
 
-                <div class="p-5">
-                     {{ form.password.label(class="form-label") }}
-                     {{ form.password(class="form-control") }}
+                <div class="mb-3">
+                    {{ form.password.label(class="form-label fw-semibold") }}
+                    {{ form.password(class="form-control") }}
                 </div>
 
-                    {% if form.email.errors %}
-                         {% for erro in form.email.errors %}
-                         <p class="alert alert-danger" role="alert"> {{ erro }}</p>
-                         {% endfor %}
-                    {% endif %}
+                {% if form.email.errors %}
+                    {% for erro in form.email.errors %}
+                        <p class="alert alert-danger py-2" role="alert">{{ erro }}</p>
+                    {% endfor %}
+                {% endif %}
 
-                <div class="p-5">
-                    {{ form.submit(class="btn btn-primary mb-3") }}
-
+                <div class="d-grid mt-4">
+                    {{ form.submit(class="btn btn-primary") }}
                 </div>
             </form>
-            <a href="{{ url_for('createaccount') }}">Não tem uma conta? Cadastre-se</a>
-        {% endblock %}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+            <div class="text-center mt-3">
+                <a href="{{ url_for('createaccount') }}" class="text-decoration-none">Não tem uma conta? Cadastre-se</a>
+            </div>
+
+            {% endblock %}
+        </div>
+
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-{%endblock %}
+
+{% endblock %}
 
 </html>
 

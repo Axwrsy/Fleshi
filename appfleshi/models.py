@@ -10,6 +10,8 @@ from flask_login import UserMixin
 class User(database.Model, UserMixin):
   id = database.Column(database.Integer, primary_key=True)
   username = database.Column(database.String(20), unique=True, nullable=False)
+  # campo p add a biografia
+  bio = database.Column(database.String(160), nullable=True, default='')
   email = database.Column(database.String(100), unique=True, nullable=False)
   password = database.Column(database.String(60), nullable=False)
   photos = database.relationship('Photo', backref='user', lazy=True)
