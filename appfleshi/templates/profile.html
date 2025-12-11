@@ -10,6 +10,17 @@
     <body>
         <h1>Perfil do usuário: {{ user.username }}</h1>
 
+
+        {% if user.bio %}
+            <p class="bio">{{ user.bio }}</p>
+        {% else %}
+            <p class="bio" style="color:gray;">Nenhuma biografia adicionada.</p>
+        {% endif %}
+
+        {% if current_user.id == user.id %}
+            <a href="{{ url_for('editar_perfil') }}">Editar biografia</a>
+        {% endif %}
+
         {% if form %}
             <form method="post" enctype="multipart/form-data">
                 {{ form.csrf_token }}
