@@ -1,0 +1,80 @@
+{% extends "homepage.html" %}
+
+{% block title %}
+    Perfil - {{ user.username }}
+{% endblock %}
+
+{% block body %}
+
+
+
+<div class="container mt-4">
+<body>
+    {% include "navbar.html" %}
+    <!-- título -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold">Perfil: {{ user.username }}</h1>
+
+
+    </div>
+
+    <!-- biografia -->
+    <div class="card shadow-sm mb-4" style="max-width: 600px;">
+        <div class="card-body">
+            <h5 class="card-title"></h5>
+
+            {% if user.bio %}
+                <p class="card-text">{{ user.bio }}</p>
+            {% else %}
+                <p class="text-muted">Nenhuma biografia adicionada.</p>
+            {% endif %}
+             {% if current_user.id == user.id %}
+            <a class="btn btn-outline-primary btn-sm" href="{{ url_for('editar_perfil') }}">
+               Editar biografia
+            </a>
+        {% endif %}
+        </div>
+    </div>
+
+    <!-- formulário de Upload -->
+    {% if form %}
+    <div class="card shadow-sm mb-4" style="max-width: 600px;">
+        <div class="card-body">
+            <h5 class="card-title">Adicionar foto</h5>
+            <form method="post" enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                <div class="mb-3">
+                    {{ form.photo(class="form-control") }}
+                </div>
+                <button class="btn btn-success" type="submit">
+                     Postar
+                </button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- fotos do usuário -->
+    <h3 class="mt-4 mb-3">Fotos publicadas</h3>
+
+    <div class="row">
+        {% for photo in user.photos %}
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm">
+                    <img src="{{ url_for('static', filename='posts_photos/' ~ photo.file_name) }}"
+                         class="card-img-top"
+                         style="height: 200px; object-fit: cover;"
+                         alt="{{ photo.file_name }}">
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- logout -->
+    <div class="mt-4">
+        <a class="btn btn-danger" href="{{ url_for('logout') }}">Sair</a>
+    </div>
+
+</div>
+</body>
+{% endblock %}
